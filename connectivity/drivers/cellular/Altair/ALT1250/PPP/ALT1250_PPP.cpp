@@ -70,6 +70,22 @@ AT_CellularNetwork *ALT1250_PPP::open_network_impl(ATHandler &at)
     return new ALT1250_PPP_CellularNetwork(at, *this);
 }
 
+nsapi_error_t ALT1250_PPP::get_sim_state(SimState &state)
+{
+    _at->lock();
+    _at->flush();
+    nsapi_error_t err = _at->at_cmd_discard("+CIMI", "");
+    _at->unlock();
+
+    state = SimStateReady;
+    if (err != NSAPI_ERROR_OK) {
+        tr_warn("SIM not readable.");
+        state = SimStateUnknown;
+    }
+
+    return err;
+}
+
 nsapi_error_t ALT1250_PPP::soft_power_on()
 {
     // check if modem is already ready

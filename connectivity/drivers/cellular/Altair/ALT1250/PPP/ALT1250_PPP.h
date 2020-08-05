@@ -35,6 +35,7 @@ namespace mbed {
 class ALT1250_PPP : public AT_CellularDevice {
 public:
     ALT1250_PPP(FileHandle *fh, PinName rst = NC, PinDirection pin_dir = PIN_OUTPUT, PinMode pin_mode = PullUp, bool value = 1);
+    virtual nsapi_error_t get_sim_state(SimState &state);
 
 protected: // AT_CellularDevice
     virtual AT_CellularContext *create_context_impl(ATHandler &at, const char *apn, bool cp_req = false, bool nonip_req = false);
